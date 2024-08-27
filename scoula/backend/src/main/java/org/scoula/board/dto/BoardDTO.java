@@ -17,7 +17,6 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class BoardDTO {
-
     private Long no;
     private String title;
     private String content;
@@ -25,12 +24,15 @@ public class BoardDTO {
     private Date regDate;
     private Date updateDate;
 
-    // 첨부파일
-    List<MultipartFile> files = new ArrayList<>(); // 실제업로드된파일(Multipart)목록
+//    게시글 하나에 여러개의 첨부파일이 추가될 수 있다
+    private List<BoardAttachmentVO> attaches;
 
-    // VO  DTO 변환
+//    VO랑 다르게 클래스 사용 가능
+    List<MultipartFile> files = new ArrayList<>();
+
+    // VO -> DTO 변환
     public static BoardDTO of(BoardVO vo) {
-//        vo가 null 이면 null 반환, null이 아니면 BoardDTO로 변환해줌
+//        VO가 null 이면 null 반환, null이 아니면 BoardDTO로 변환해줌
         return vo == null ? null : BoardDTO.builder()
                 .no(vo.getNo())
                 .title(vo.getTitle())
@@ -41,7 +43,8 @@ public class BoardDTO {
                 .updateDate(vo.getUpdateDate())
                 .build();
     }
-    // DTO VO 변환
+
+    // DTO -> VO 변환
     public BoardVO toVo() {
         return BoardVO.builder()
                 .no(no)
@@ -53,7 +56,4 @@ public class BoardDTO {
                 .updateDate(updateDate)
                 .build();
     }
-
-    private List<BoardAttachmentVO> attaches;
 }
-

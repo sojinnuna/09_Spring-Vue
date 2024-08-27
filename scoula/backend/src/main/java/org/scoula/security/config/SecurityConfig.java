@@ -41,8 +41,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
     @Autowired
     private JwtUsernamePasswordAuthenticationFilter jwtUsernamePasswordAuthenticationFilter;
-    private final AuthenticationErrorFilter authenticationErrorFilter;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final AuthenticationErrorFilter authenticationErrorFilter;
+
     private final CustomAccessDeniedHandler accessDeniedHandler;
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
@@ -95,26 +96,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(encodingFilter(), CsrfFilter.class)
                 // 인증 에러 필터
                 .addFilterBefore(authenticationErrorFilter, UsernamePasswordAuthenticationFilter.class)
-                // Jwt 인증 필터
+                // Jst 인증 필터, 기준 필터는 사용자 필터는 사용 못한다.
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 // 로그인 인증 필터 설정 (jwtUsernamePasswordAuthenticationFilter -> UsernamePasswordAuthenticationFilter)
                 .addFilterBefore(jwtUsernamePasswordAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
-        http
-                .exceptionHandling()
-                .authenticationEntryPoint(authenticationEntryPoint)
-                .accessDeniedHandler(accessDeniedHandler);
-
-        http
-                .authorizeRequests() // 경로별 접근 권한 설정
-                .antMatchers(HttpMethod.OPTIONS).permitAll() // 모든 OPTIONS 요청 허용
-                .anyRequest().permitAll(); // 일단 모든 접근 허용
+        // 예외 처리 설정
+        http.exceptionHandling()
+                // 인증 실패 시 처리할 객체
+                        .authenticationEntryPoint(authenticationEntryPoint)
+                // 접근 거부 시 처리할 객체
+                        .accessDeniedHandler(accessDeniedHandler);
 
         http.httpBasic().disable() // 기본 HTTP 인증 비활성화
                 .csrf().disable() // CSRF 비활성화
                 .formLogin().disable() //formLogin 비활성화
                 // 세션 생성 모드 설정 ( stateless : 세션 사용 안하겠다)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        http
+                .authorizeRequests() // 경로별 접근 권한 설정
+                .antMatchers(HttpMethod.OPTIONS).permitAll() // 모든 OPTIONS 요청 허용
+                .anyRequest().permitAll(); // 나머지 요청들은 모든 접근 허용
 
     }
 

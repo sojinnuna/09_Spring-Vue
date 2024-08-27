@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 @Slf4j
 public class JwtUsernamePasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-    //    생성자 주입을 통해서 데이터 전달
+//    생성자 주입을 통해서 데이터 전달
     public JwtUsernamePasswordAuthenticationFilter(
             AuthenticationManager authenticationManager, // SecurityConfig가 생성된 이후에 등록!! 중요
             LoginSuccessHandler loginSuccessHandler,
@@ -31,7 +31,7 @@ public class JwtUsernamePasswordAuthenticationFilter extends UsernamePasswordAut
         setAuthenticationFailureHandler(loginFailureHandler); // 실패 핸들러 등록
     }
 
-    //    로그인 요청이 필터의 처리 URL과 일치할때 로그인 작업 처리하는 메소드
+//    로그인 요청이 필터의 처리 URL과 일치할때 로그인 작업 처리하는 메소드
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         // 요청의 body에서 사용자 이름과 비밀번호 추출하여 LoginDTO 객체 생성
@@ -39,7 +39,7 @@ public class JwtUsernamePasswordAuthenticationFilter extends UsernamePasswordAut
 
         // 사용자 이름과 비밀번호 사용하여 인증 토큰 생성
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword());
-
+        
         // AuthenticationManager에게 인증을 위임해서 처리
         return getAuthenticationManager().authenticate(authenticationToken);
     }

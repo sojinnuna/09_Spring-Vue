@@ -16,16 +16,17 @@ import java.util.Date;
 @Builder
 @Log4j
 public class BoardAttachmentVO {
-    private Long no;
-    private Long bno; // FK: Board의 no
-    private String filename; // 원본 파일명
-    private String path; // 서버에 저장된 파일 경로
+    private Long no;            //
+    private Long bno;           // FK: Board의 no
+    private String filename;    // 원본 파일명
+    private String path;        // 서버에 저장된 파일 경로
     private String contentType; // 파일 mime-type
-    private Long size; // 파일의 크기
-    private Date regDate; // 등록일
+    private Long size;          // 파일의 크기
+    private Date regDate;       // 등록일
 
-    // 팩토리메서드
-    public static BoardAttachmentVO of(MultipartFile part, Long bno, String path) {  // path: 업로드된파일경로
+    // 팩토리 메서드
+//    part, bno, path 세가지 값을 받아서 BoardAttachmentVO 객체 생성
+    public static BoardAttachmentVO of(MultipartFile part, Long bno, String path) { // path: 업로드된 파일 경로
 
         return builder()
                 .bno(bno)
@@ -36,9 +37,8 @@ public class BoardAttachmentVO {
                 .build();
     }
 
+//    size를 보기 쉬운 포맷 형식으로 변환해준다
     public String getFileSize() {
         return UploadFiles.getFormatSize(size);
     }
 }
-
-

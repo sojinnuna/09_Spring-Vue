@@ -1,8 +1,8 @@
 <script setup>
 import { useRouter } from 'vue-router';
 const router = useRouter();
+// 루트 경로로 이동 시켜주는 함수
 const logout = (e) => {
-  // 로그아웃
   router.push('/');
 };
 </script>
@@ -13,3 +13,5 @@ const logout = (e) => {
     로그아웃
   </a>
 </template>
+
+<style></style>

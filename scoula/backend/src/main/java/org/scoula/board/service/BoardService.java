@@ -12,9 +12,9 @@ public interface BoardService {
 
     public BoardDTO create(BoardDTO board);
 
-    public  BoardDTO update(BoardDTO board);
+    public BoardDTO update(BoardDTO board);
 
-    public  BoardDTO delete(Long no);
+    public BoardDTO delete(Long no);
 
     public BoardAttachmentVO getAttachment(Long no);
 

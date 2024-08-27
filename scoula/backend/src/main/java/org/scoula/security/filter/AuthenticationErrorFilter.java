@@ -3,11 +3,11 @@ package org.scoula.security.filter;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import org.scoula.security.util.JsonResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import io.jsonwebtoken.security.SignatureException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -19,20 +19,19 @@ import java.io.IOException;
 public class AuthenticationErrorFilter extends OncePerRequestFilter {
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
-        try {
-            // 필터 체인을 통해 요청을 계속 전달합니다.
-            filterChain.doFilter(request, response);
-        } catch (ExpiredJwtException e) {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        try{
+            // 필터 체인 계속 진행
+            super.doFilter(request, response, filterChain);
+        }catch (ExpiredJwtException e){
             // jwt 토큰의 유효시간이 지났을 때 예외 처리
-            JsonResponse.sendError(response, HttpStatus.UNAUTHORIZED, "토큰의 유효시간이 지났습니다.");
-        } catch (UnsupportedJwtException | MalformedJwtException | SignatureException e) {
-            // jwt 토큰이 지원되지 않거나, 형식이 잘못되거나, 서명이 되었을 때 예외 처리
-            JsonResponse.sendError(response, HttpStatus.UNAUTHORIZED, e.getMessage());
-        } catch (ServletException e) {
+            JsonResponse.sendError(response, HttpStatus.UNAUTHORIZED,"토큰의 유효시간이 지났습니다.");
+        }catch (UnsupportedJwtException | MalformedJwtException | SignatureException e){
+            // jwt 토큰이 지원되지 않거나, 형식이 잘못되었거나, 서명이 되었을 때 예외 처리
+            JsonResponse.sendError(response, HttpStatus.UNAUTHORIZED,e.getMessage());
+        } catch (ServletException e){
             // 기타 서블릿 예외 처리
-            JsonResponse.sendError(response, HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            JsonResponse.sendError(response, HttpStatus.INTERNAL_SERVER_ERROR,e.getMessage());
         }
     }
 }

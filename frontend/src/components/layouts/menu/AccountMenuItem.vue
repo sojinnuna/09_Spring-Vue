@@ -1,6 +1,7 @@
 <script setup>
 defineProps({ username: String });
 </script>
+
 <template>
   <li class="nav-item">
     <router-link class="nav-link" to="/auth/profile">
@@ -9,4 +10,5 @@ defineProps({ username: String });
     </router-link>
   </li>
 </template>
+
 <style></style>

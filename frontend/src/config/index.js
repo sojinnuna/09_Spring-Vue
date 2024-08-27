@@ -1,6 +1,6 @@
 export default {
   title: 'Scoula', // 메인 타이틀
-  subtitle: 'KB Fullstack 학습 (Vue+Spring)', // 서브 타이틀
+  subtitle: 'KB Fullstack 학습(Vue+Spring)', // 서브 타이틀
   menus: [
     // 메인 메뉴 구성 정보
     {
@@ -19,7 +19,7 @@ export default {
       icon: 'fa-regular fa-images',
     },
   ],
-  accoutMenus: {
+  accountMenus: {
     // 인증 관련 메뉴 정보
     login: {
       url: '/auth/login',
