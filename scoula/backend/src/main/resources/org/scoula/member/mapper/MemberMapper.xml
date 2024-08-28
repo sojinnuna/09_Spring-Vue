@@ -46,5 +46,14 @@
         VALUES(#{username}, #{auth})
     </insert>
 
+<!--     특정 사용자의 이메일과 수정 날짜를 업데이트 -->
+    <update id="update">
+        UPDATE tbl_member
+        SET
+            email = #{email},
+            update_date = now()
+        WHERE username =#{username}
+    </update>
+
 </mapper>
 

@@ -6,11 +6,15 @@ import LogoutMenuItem from './LogoutMenuItem.vue';
 import config from '@/config';
 
 const { login, join } = config.accountMenus;
+import { useAuthStore } from '@/stores/auth.js';
+
+const auth = useAuthStore();
 
 // 로그인 여부
-const isLogin = computed(() => false);
-const username = computed(() => '');
+const isLogin = computed(() => auth.isLogin); // 로그인 상태를 반응형으로 처리
+const username = computed(() => auth.username);
 </script>
+
 <template>
   <ul class="navbar-nav ms-auto">
     <!-- isLogin이 true인 경우 해당 템플릿으로 묶은 부분을 렌더링한다 -->
