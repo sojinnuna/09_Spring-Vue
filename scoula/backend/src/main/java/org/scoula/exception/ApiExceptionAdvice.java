@@ -1,5 +1,7 @@
 package org.scoula.exception;
 
+import org.scoula.member.exception.PasswordMissmatchException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -10,14 +12,23 @@ import java.util.NoSuchElementException;
 @RestControllerAdvice
 public class ApiExceptionAdvice {
 
-    // 404 에러 처리
-    @ExceptionHandler(NoSuchElementException.class)
+//    패스워드 불일치 예외 발생시 400으로 처리
+    @ExceptionHandler(PasswordMissmatchException.class)
     protected ResponseEntity<String> handleIllegalArgumentException(NoSuchElementException e) {
         return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)  // HTTP 상태 코드 404 설정
-                .header("Content-Type", "text/plain;charset=UTF-8")  // 응답 헤더 설정
-                .body("해당 ID의 요소가 없습니다.");  // 응답 바디에 메시지 설정
+                .status(400)  // HTTP 상태 코드 404 설정
+                .header(HttpHeaders.CONTENT_TYPE, "text/plain;charset=UTF-8")  // 응답 헤더 설정
+                .body(e.getMessage());  // 응답 바디에 메시지 설정
     }
+
+//    // 404 에러 처리
+//    @ExceptionHandler(NoSuchElementException.class)
+//    protected ResponseEntity<String> handleIllegalArgumentException(NoSuchElementException e) {
+//        return ResponseEntity
+//                .status(HttpStatus.NOT_FOUND)  // HTTP 상태 코드 404 설정
+//                .header("Content-Type", "text/plain;charset=UTF-8")  // 응답 헤더 설정
+//                .body("해당 ID의 요소가 없습니다.");  // 응답 바디에 메시지 설정
+//    }
 
     // 500 에러 처리
     @ExceptionHandler(Exception.class)
