@@ -9,13 +9,15 @@ const router = useRouter();
 
 const page = ref({});
 
+// page.value가 바뀌는 동시에 다시 계산된다
 const articles = computed(() => page.value);
 
 const load = async () => {
   try {
+    // API 호출을 통해서 게시판 목록을 가져와서 저장한다
     page.value = await api.getList();
     console.log(page.value);
-  } catch {}
+  } catch (error) {}
 };
 
 load();
@@ -34,9 +36,11 @@ load();
         </tr>
       </thead>
       <tbody>
+        <!-- article은 BoardDTO를 의미한다 -->
         <tr v-for="article in articles" :key="article.no">
-          <d>{{ article.no }}</d>
+          <td>{{ article.no }}</td>
           <td>
+            <!-- board/detail, 상세보기 페이지로 이동하면서 파라미터로 게시글의 번호를 넘겨준다 -->
             <router-link
               :to="{ name: 'board/detail', params: { no: article.no } }"
             >
@@ -44,6 +48,7 @@ load();
             </router-link>
           </td>
           <td>{{ article.writer }}</td>
+          <!-- moment 함수를 사용해서 날짜를 포매팅 가능 -->
           <td>{{ moment(article.regDate).format('YYYY-MM-DD') }}</td>
         </tr>
       </tbody>
@@ -51,9 +56,10 @@ load();
     <div class="my-5 d-flex">
       <div class="flex-grow-1 text-center">페이지 네이션</div>
       <div>
+        <!-- 글 작성 페이지로 이동하는 버튼 -->
         <router-link :to="{ name: 'board/create' }" class="btn btn-primary">
-          <i class="fa-solid fa-pen-to-square"></i> 글 작성</router-link
-        >
+          <i class="fa-solid fa-pen-to-square"></i> 글 작성
+        </router-link>
       </div>
     </div>
   </div>

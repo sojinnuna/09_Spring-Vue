@@ -1,4 +1,6 @@
 // 인증과 관련한 라우트를 정의하는 js
+import { isAuthenticated } from '@/util/guards';
+
 export default [
   {
     // 로그인 페이지에 대한 라우트
@@ -17,11 +19,13 @@ export default [
     path: '/auth/profile',
     name: 'profile',
     component: () => import('../pages/auth/ProfilePage.vue'),
+    beforeEnter: isAuthenticated,
   },
   {
     // 비밀번호 변경 페이지에 대한 라우트
     path: '/auth/changepassword',
     name: 'changepassword',
     component: () => import('../pages/auth/ChangePasswordPage.vue'),
+    beforeEnter: isAuthenticated,
   },
 ];

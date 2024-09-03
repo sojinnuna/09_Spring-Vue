@@ -86,7 +86,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
 //        해당 경로들은 보안 검사 무시
-        web.ignoring().antMatchers("/assets/**","/*","/api/member/**");
+        web.ignoring().antMatchers("/assets/**","/*");
     }
 
     @Override
@@ -104,9 +104,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 예외 처리 설정
         http.exceptionHandling()
                 // 인증 실패 시 처리할 객체
-                        .authenticationEntryPoint(authenticationEntryPoint)
+                .authenticationEntryPoint(authenticationEntryPoint)
                 // 접근 거부 시 처리할 객체
-                        .accessDeniedHandler(accessDeniedHandler);
+                .accessDeniedHandler(accessDeniedHandler);
 
         http.httpBasic().disable() // 기본 HTTP 인증 비활성화
                 .csrf().disable() // CSRF 비활성화
@@ -116,9 +116,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                 .authorizeRequests() // 경로별 접근 권한 설정
-                .antMatchers(HttpMethod.OPTIONS).permitAll() // 모든 OPTIONS 요청 허용
-                .antMatchers(HttpMethod.POST,"/api/member").authenticated()
-                .antMatchers(HttpMethod.PUT,"/api/member", "/api/member/*/changepassword").authenticated()
+                .antMatchers(HttpMethod.GET, "/api/member/*").authenticated()
+                .antMatchers(HttpMethod.PUT,"/api/member/*","/api/member/*/changepassword").authenticated()
+                .antMatchers(HttpMethod.POST,"/api/board/**").authenticated()
+                .antMatchers(HttpMethod.PUT,"/api/board/**").authenticated()
+                .antMatchers(HttpMethod.DELETE,"/api/board/**").authenticated()
                 .anyRequest().permitAll(); // 나머지 요청들은 모든 접근 허용
 
     }

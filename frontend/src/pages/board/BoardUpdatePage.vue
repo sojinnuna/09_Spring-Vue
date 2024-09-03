@@ -6,7 +6,7 @@ import boardApi from '@/api/boardApi';
 const cr = useRoute();
 const router = useRouter();
 
-const no = cr.params.no;
+const no = cr.params.no; // 경로변수 가져오기
 const article = reactive({});
 const attachments = ref([]);
 const orgArticle = ref({});
@@ -15,15 +15,19 @@ const files = ref(null);
 const back = () => {
   router.push({ name: 'board/detail', params: { no } });
 };
+
+// 첨부 파일 삭제
 const removeFile = async (no, filename) => {
   if (!confirm(filename + '을 삭제할까요?')) return;
 
-  await boardApi.deleteAttachment(no);
+  await boardApi.deleteAttachment(no); // 첨부파일 삭제
 
+  // 첨부파일의 no 값을 비교해서 우리가 찾는 첨부파일의 인덱스를 가져온다
   const ix = attachments.value.findIndex((f) => f.no === no);
-  attachments.value.splice(ix, 1);
+  attachments.value.splice(ix, 1); // splice(시작 인덱스, 몇개 삭제할지 갯수, (삽입할 아이템))
 };
 
+// 수정된 게시글 제출
 const submit = async () => {
   if (!confirm('수정할까요?')) return;
 
@@ -32,10 +36,13 @@ const submit = async () => {
   }
 
   await boardApi.update(article);
+  // 해당 url에서 ? 뒤의 문장을 query로 가져온다
   router.push({ name: 'board/detail', params: { no }, query: cr.query });
 };
 
+// 게시글 데이터 초기화
 const reset = () => {
+  // orgArticle 값에 기존 게시글 데이터 저장해둔후  reset 시 다시 불러온다
   article.no = orgArticle.value.no;
   article.title = orgArticle.value.title;
   article.writer = orgArticle.value.writer;
@@ -43,10 +50,12 @@ const reset = () => {
   console.log(article);
 };
 
+// 로드할때 기존 게시글의 데이터를 미리 채워둔다
 const load = async () => {
   const data = await boardApi.get(no);
   orgArticle.value = { ...data };
   attachments.value = data.attaches;
+  console.log(attachments.value);
   reset();
 };
 
@@ -56,6 +65,7 @@ load();
 <template>
   <h1><i class="fa-regular fa-pen-to-square"></i> 글 수정</h1>
   <form @submit.prevent="submit">
+    <!-- 제목 입력 필드 -->
     <div class="mb-3 mt-3">
       <label for="title" class="form-label"> 제목 </label>
       <input
@@ -67,8 +77,10 @@ load();
       />
       <div class="invalid-feedback">제목은 필수 요소입니다.</div>
     </div>
+    <!-- 기존 첨부 파일 목록 -->
     <div class="mb-3 mt-3">
       <label class="form-label"> 기존 첨부파일 </label>
+      <!-- 첨부파일들을 돌면서 이름과 휴지통 아이콘 생성, 휴지통 클릭시 해당 첨부파일 삭제됨 -->
       <div v-for="file in attachments" :key="file.no" class="attach">
         <i class="fa-solid fa-paperclip"></i> {{ file.filename }}
         <i
@@ -77,6 +89,7 @@ load();
         ></i>
       </div>
     </div>
+    <!-- 새로운 첨부 파일 업로드 -->
     <div class="mb-3 mt-3">
       <label for="files" class="form-label"> 첨부파일 </label>
       <input
@@ -88,7 +101,7 @@ load();
         multiple
       />
     </div>
-
+    <!-- 내용 입력 필드 -->
     <div class="mb-3 mt-3">
       <label for="content" class="form-label"> 내용 </label>
       <textarea
@@ -99,14 +112,16 @@ load();
         rows="10"
       ></textarea>
     </div>
-
+    <!-- 버튼 그룹 -->
     <div class="my-5 text-center">
       <button type="submit" class="btn btn-primary me-3">
         <i class="fa-solid fa-check"></i> 확인
       </button>
+      <!-- 기존 게시글 데이터 불러오는 버튼 -->
       <button type="button" class="btn btn-primary me-3" @click="reset">
         <i class="fa-solid fa-undo"></i> 취소
       </button>
+      <!-- 상세 페이지로 돌아가는 버튼 -->
       <button class="btn btn-primary" @click="back">
         <i class="fa-solid fa-arrow-left"></i> 돌아가기
       </button>
