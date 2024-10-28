@@ -1,17 +1,17 @@
 <script setup>
-import { reactive, reative, ref } from 'vue'; // Vue에서 반응형 상태 관리와 참조를 위한 기능
-import { useRouter } from 'vue-router'; // Vue Router 사용하기 위한 훅
-import authApi from '@/api/authApi'; // 인증 관련 API 함수들
+import { reactive, reative, ref } from "vue"; // Vue에서 반응형 상태 관리와 참조를 위한 기능
+import { useRouter } from "vue-router"; // Vue Router 사용하기 위한 훅
+import authApi from "@/api/authApi"; // 인증 관련 API 함수들
 
 const router = useRouter();
 const avatar = ref(null);
-const checkError = ref('');
+const checkError = ref("");
 
 const member = reactive({
-  username: 'sojin',
-  email: 'sojin@naver.com',
-  password: '1234',
-  password1: '1234',
+  username: "sojin",
+  email: "sojin@naver.com",
+  password: "1234",
+  password1: "1234",
   avatar: null,
 });
 
@@ -21,7 +21,7 @@ const disableSubmit = ref(true); // 제출 버튼 비활성화 여부
 const checkUsername = async () => {
   if (!member.username) {
     //  사용자 이름이 입력되지 않은 경우 경고 메시지 표시
-    return alert('사용자 ID를 입력하세요.');
+    return alert("사용자 ID를 입력하세요.");
   }
 
   // 이름이 중복된 경우 제출 버튼 비활성화
@@ -29,23 +29,23 @@ const checkUsername = async () => {
   console.log(disableSubmit.value, typeof disableSubmit.value);
   // 제출 버튼이 비활성화된 상태면 ID가 사용중이란 에러 메시지 출력
   checkError.value = disableSubmit.value
-    ? '이미 사용중인 ID입니다.'
-    : '사용가능한 ID입니다.';
+    ? "이미 사용중인 ID입니다."
+    : "사용가능한 ID입니다.";
 };
 
 // username 입력 핸들러
 const changeUsername = () => {
   disableSubmit.value = true; // ID 입력 중엔 항상 제출 버튼을 비활성화
   if (member.username) {
-    checkError.value = 'ID 중복 체크를 하셔야 합니다.';
+    checkError.value = "ID 중복 체크를 하셔야 합니다.";
   } else {
-    checkError.value = '';
+    checkError.value = "";
   }
 };
 
 const join = async () => {
   if (member.password != member.password2) {
-    return alert('비밀번호가 일치하지 않습니다.');
+    return alert("비밀번호가 일치하지 않습니다.");
   }
   if (avatar.value.files.length > 0) {
     // 아바타 파일이 업로드된 경우 member 객체에 추가
@@ -53,7 +53,7 @@ const join = async () => {
   }
   try {
     await authApi.create(member); // 회원가입 API 호출
-    router.push({ name: 'home' }); // 회원 가입 성공 시, 첫 페이지로 이동 또는 로그인 페이지로 이동
+    router.push({ name: "home" }); // 회원 가입 성공 시, 첫 페이지로 이동 또는 로그인 페이지로 이동
   } catch (e) {
     console.error(e);
   }
