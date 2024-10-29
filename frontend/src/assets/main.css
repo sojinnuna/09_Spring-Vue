@@ -1,8 +1,19 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;200;300;400;500;600;700;800;900&display=swap');
+/* @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;200;300;400;500;600;700;800;900&display=swap"); */
 
-* {
-  font-family: 'Noto Sans KR';
+@font-face {
+  font-family: "S-CoreDream-3Light";
+  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
 }
+/* ... 기존 코드 ... */
+* {
+  font-family: "Noto Sans KR";
+  /* S-CoreDream-3Light 폰트 추가 */
+  font-family: "S-CoreDream-3Light", "Noto Sans KR", sans-serif; /* S-CoreDream-3Light를 기본으로 설정 */
+}
+/* ... 기존 코드 ... */
 .avatar {
   border-radius: 50%; /* 둥근 모서리를 위해 반지름을 50%로 설정 */
   border-color: gray;
